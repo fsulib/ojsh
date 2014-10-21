@@ -6,6 +6,7 @@ $options = getopt("j:n");
 if (!isset($options['j'])) {
   echo "ERROR: No journal specified.\n";
   echo "USAGE: ./ojsh.php -j baseurl [-n]\n";
+  exit(0);
 } else {
   $journal = $options['j'];
 }
@@ -33,26 +34,44 @@ function get_clean_html($url) {
   curl_setopt($urlcurl, CURLOPT_URL, $url);
   curl_setopt($urlcurl, CURLOPT_RETURNTRANSFER, TRUE);
   $urltext = curl_exec($urlcurl);
-
   $tidytext = tidy_parse_string($urltext);
   tidy_clean_repair($tidytext);
-  $output = trim(preg_replace('/\s+/', ' ', $tidytext));
-  $output = preg_replace('/>\s+</', '><', $output);
+  $output = trim($tidytext);
+  $output = preg_replace('/\n/', '', $output);
   return $output;
 }
 
 $archurl = "$journal/issue/archive";
 $archtext = get_clean_html($archurl);
+preg_match_all('/<h4><a\ href="(.+?)">(.+?)<\/a\><\/h4>/', $archtext, $archresults);
+
+if (!$newest) { 
+  $i = 1;
+  foreach($archresults[2] as $issue) {
+    echo "$i. $issue\n";
+    $i++;
+  }
+  echo "Enter an ID number: ";
+  $answer = (int)fgets(STDIN);
+  $issueurl = $archresults[1][$answer - 1];
+} else {
+  $issueurl = $archresults[1][0];
+}
+
+$tocurl = "$issueurl/showToc";
+$toctext = get_clean_html($tocurl);
+preg_match_all('/<table\ class="tocArticle".*?<\/table>/', $toctext, $tocresults);
+
+//echo $toctext;
+print_r($tocresults);
+
+
 
 
 /*
-  selecturl = re.search('<h4><a href="(.+?)">(.+?)</a></h4>', archivedata).group(1)
-  archiveset = re.findall("<h4><a href=.*?</a></h4>", archivedata)
-    link = re.search('<h4><a href="(.+?)">(.+?)</a></h4>', match)
-tocurl = selecturl + "/showToc"
 tocset = re.findall('<table class="tocArticle" width="100%">.*?</table>', tocdata)
   articlepattern = '<table class="tocArticle" width="100%"><tr valign="top"><td class="tocTitle">(<a href="(.*)">)?(.+?)(</a>)?</td><td class="tocGalleys"><a href="(.+?)" class="file">(.+?)</a></td></tr><tr><td class="tocAuthors">(.+?)</td><td class="tocPages"></td></tr></table>'
   articlepattern = '<table class="tocArticle" width="100%"><tr valign="top"><td class="tocTitle">(<a href="(.*)">)?(.+?)(</a>)?</td><td class="tocGalleys"><a href="(.+?)" class="file">PDF</a></td></tr><tr><td class="tocAuthors">(.+?)</td><td class="tocPages"></td></tr></table>'
  pdf url string: http://journals.fcla.edu/heal/article/download/82860/79774/pdf
-*/
+ */
 ?>
