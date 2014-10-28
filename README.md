@@ -11,6 +11,8 @@ ojsh retrieves content by modifying urls, making curl requests and using regular
 
 ## Command line options
 Harvests are configured via command line options passed to ojsh, with the only required option being '-j' followed by the base url for the journal you want to harvest, for instance:
-`./ojsh.php -j http://journals.fcla.edu/heal/`
+```bash
+./ojsh.php -j http://journals.fcla.edu/heal/
+```
 
 
