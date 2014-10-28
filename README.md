@@ -36,4 +36,11 @@ The '-n' option takes no arguments and simply specifies that the user wants the 
 ### -p
 The '-p' option tells OJS to convert all non-PDF content files (such as images) into PDFs using `convert`, an ImageMagick command line utility. This will only work if you have ImageMagic utilities installed on your machine.
 
+### Putting it all together
+If you want to archive the newest issue of the HEAL journal, add FLVC specific extensions to the metadata as Florida State University, convert all the content to PDF files and name the output 'foo.zip', you would enter the following command:
+```bash
+./ojsh.php -j http://journals.fcla.edu/heal/ -o foo -i FSU -np
+```
 
+## Adding 'short' journal names
+Since you will most likely be harvesting a few individual journals frequently, ojsh has a switch statement starting on line 14
