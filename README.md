@@ -42,5 +42,5 @@ If you want to archive the newest issue of the HEAL journal, add FLVC specific e
 ./ojsh.php -j http://journals.fcla.edu/heal/ -o foo -i FSU -np
 ```
 
-## Adding 'short' journal names
-Since you will most likely be harvesting a few individual journals frequently, ojsh has a switch statement [starting on line 14](https://github.com/fsulib/ojsh/blob/master/ojsh.php#L14)
+## Adding 'short names' for journals
+Since you will most likely be harvesting a few individual journals frequently, ojsh has a switch statement [starting on line 14](https://github.com/fsulib/ojsh/blob/master/ojsh.php#L14) that checks the argument pass to the '-j' option to see if it is one of a few preset strings, and if it is it automatically uses a preset url. For instance, if you are going to be archiving HEAL a lot, you would add 'heal' as a swich case that redirects to 'http://journals.fcla.edu/heal'. This would allow you to fire off the command as `./ojsh.php -j heal` instead of `./ojsh.php -j http://journals.fcla.edu/heal`. Use the few examples already in the script to define new short names for journals you will be harvesting frequently.
