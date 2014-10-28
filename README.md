@@ -15,5 +15,25 @@ Harvests are configured via command line options passed to ojsh, with the only r
 ```bash
 ./ojsh.php -j http://journals.fcla.edu/heal/
 ```
-This command would present the user with a numbered list of available issues. After 
+This command would present the user with a numbered list of available issues. After selecting an issue, all output would be saved as a timestamped zip file in the user's current working directory.
+
+### -o
+The '-o' option allows the user to name the zipped output file instead of having it automatically be a timestamp. Please note that '.zip' is automatically appended to the name passed to the '-o' option, so specifying '-o output.zip' on invocation will result in an output file named 'output.zip.zip'. The '-o' option should be used in the following way:
+```bash
+./ojsh.php -j http://journals.fcla.edu/heal/ -o testoutputname
+```
+This would result in an output file named 'testoutputname.zip'.
+
+### -i
+The '-i' option is specifically for FLVC instituitions, and is used to pass a 3 character institution ID to ojsh in order to generate FLVC specific extensions on the resulting MODS records, such 'owningInstitution', 'submittingInstitution', and an FLVC-style IID identifier. This is purely optional, and if the '-i' is not present all FLVC specific info will be left out of the resulting MODS records. Use the '-i' option in the following way:
+```bash
+./ojsh.php -j http://journals.fcla.edu/heal/ -i FSU
+```
+
+### -n
+The '-n' option takes no arguments and simply specifies that the user wants the newest issue available from the OJS instance (at the top of the 'ARCHIVES' page). Using this option makes ojsh noninteractive so that it can be fired off as part of a larger shell script.
+
+### -p
+The '-p' option tells OJS to convert all non-PDF content files (such as images) into PDFs using `convert`, an ImageMagick command line utility. This will only work if you have ImageMagic utilities installed on your machine.
+
 
