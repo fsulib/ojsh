@@ -43,4 +43,4 @@ If you want to archive the newest issue of the HEAL journal, add FLVC specific e
 ```
 
 ## Adding 'short' journal names
-Since you will most likely be harvesting a few individual journals frequently, ojsh has a switch statement (starting on line 14)[https://github.com/fsulib/ojsh/blob/master/ojsh.php#L14]
+Since you will most likely be harvesting a few individual journals frequently, ojsh has a switch statement [starting on line 14](https://github.com/fsulib/ojsh/blob/master/ojsh.php#L14)
