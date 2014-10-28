@@ -9,6 +9,9 @@ ojsh is a command line script for harvesting entire issues from Open Journal Sys
 ## How it works
 ojsh retrieves content by modifying urls, making curl requests and using regular expressions on the HTML it gets back to pull out links and metadata. It first modifies the base url to make a curl request to the 'ARCHIVES' page of an OJS site and scrapes the resuls to present the user with a list of issue titles. Once the user has selected an issue, it makes another curl request to the table of contents page for that issue and scrapes the results to pull out the title, author, and OJS ID (the internal number OJS uses to name each article) for each article, as well as a link to the content file for said article. Using this data, ojsh can create a minimal MODS record for each article and save it alongside the content file of the article itself, with both files named using the article's OJS ID.
 
+## Islandora integration
+ojsh was designed as part of an effort to migrate journal content from OJS to Islandora, so the zipped files it outputs are compatible with the batch import function of the [Islandora Serials Solution Pack module](https://github.com/discoverygarden/islandora_solution_pack_serial). Due to the way journal objects are handled by the serials module, you will still have to create a root object for the journal, define its volume/issue hierarchy and create the issue you are about to import. Once the issue has been created, you can use the output of ojsh to batch load all of the articles in said issue straight into Islandora. Be warned that the batch ingester does not respect the original order of the articles, so you will have to reorder the articles and create sections yourself after the batch load finishes.
+
 ## Command line options
 ### -j
 Harvests are configured via command line options passed to ojsh, with the only required option being '-j' followed by the base url for the journal you want to harvest, for instance:
