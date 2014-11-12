@@ -39,6 +39,9 @@ The '-n' option takes no arguments and simply specifies that the user wants the 
 ### -p
 The '-p' option tells OJS to convert all non-PDF content files (such as images) into PDFs using `convert`, an ImageMagick command line utility. This will only work if you have ImageMagic utilities installed on your machine.
 
+### -t
+the '-t' option turns on MODS title sorting. If a title begins with "The " or "A ", this will be trimmed off and put in a MODS <nonSort> field instead of appearing in the <title> field. This is turned off by default since many systems (including Islandora) don't do anything with <nonSort> data.
+
 ### Putting it all together
 If you want to archive the newest issue of the HEAL journal, add FLVC specific extensions to the metadata as Florida State University, convert all the content to PDF files and name the output 'foo.zip', you would enter the following command:
 ```bash

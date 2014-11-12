@@ -2,7 +2,7 @@
 <?php
 
 // Establish all valid options
-$options = getopt("j:o:i:npd");
+$options = getopt("j:o:i:nptd");
 
 // User must specify a journal URL (or short name)
 if (!isset($options['j'])) {
@@ -58,11 +58,20 @@ if (isset($options['n'])) {
   $newest = FALSE;
 }
 
-// -p Triggers conversion of all non-PDF content files to PDFs
+// -p triggers conversion of all non-PDF content files to PDFs
 if (isset($options['p'])) {
   $convert2pdf = TRUE;
 } else {
   $convert2pdf = FALSE;
+}
+
+// -t triggers applying <nonSort> rules to title application
+if (isset($options['t'])) {
+  $tsort = TRUE;
+  echo "T on";
+} else {
+  echo "T off";
+  $tsort = FALSE;
 }
 
 // Secret debugging option -d
@@ -169,17 +178,21 @@ XML;
     }
 
     $mods->addChild('titleInfo');
-    $title_re = "/^A |^The /";
-    if (preg_match($title_re, $article['title'])) {
-      preg_match_all($title_re, $article['title'], $narray);
-      $nonsort = trim($narray[0][0]);
-      $tarray = preg_split($title_re, $article['title']);
-      $stitle = $tarray[1];
-      $mods->titleInfo->addChild('nonSort', $nonsort);
-      $mods->titleInfo->addChild('title', $stitle);
+    if ($tsort) {
+      $title_re = "/^A |^The /";
+      if (preg_match($title_re, $article['title'])) {
+        preg_match_all($title_re, $article['title'], $narray);
+        $nonsort = trim($narray[0][0]);
+        $tarray = preg_split($title_re, $article['title']);
+        $stitle = $tarray[1];
+        $mods->titleInfo->addChild('nonSort', $nonsort);
+        $mods->titleInfo->addChild('title', $stitle);
+      } else {
+        $mods->titleInfo->addChild('title', $title);
+      }   
     } else {
       $mods->titleInfo->addChild('title', $title);
-    }   
+    }
 
     $mods->addChild('name');
     $mods->name->addAttribute('type', 'personal');
