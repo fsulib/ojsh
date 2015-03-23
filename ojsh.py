@@ -18,7 +18,8 @@ parser.add_argument("-n", "--newest", help="Get the newest issue", action="store
 parser.add_argument("-d", "--debug", help="Verbose output of processing information")
 args = parser.parse_args()
 
-print("Harvesting '{0}' to {1}.tgz as {2}.".format(args.baseURL, args.output, args.institution))
+out = args.output + ".zip"
+print("Harvesting '{0}' to {1} as {2}.".format(args.baseURL, out, args.institution))
 if args.newest:
   print("Getting newest issue")
 if args.debug:
@@ -61,6 +62,8 @@ for index, article in enumerate(articles):
     articleTitle = articleTitleChunk.contents[0]
   articleAuthor = article.find("td", {"class": "tocAuthors"}).contents[0].replace('\t', '').replace('\n', '').replace(u'\xa0', u'unspecified').split(",")
   articleFileType = article.find("td", {"class": "tocGalleys"}).a.contents[0]
+  if not articleFileType:
+    articleFileType = "PDF"
   articleFileURL = article.find("td", {"class": "tocGalleys"}).a.get("href").replace('view', 'download')
   metadata.append({'title': articleTitle, 'authors': articleAuthor, 'fileType': articleFileType, 'fileURL': articleFileURL})
 
@@ -105,6 +108,6 @@ for jpeg in jpegs:
   os.system("convert tmp/{0}.jpg tmp/{1}.pdf".format(jpeg, jpeg))
   os.system("rm tmp/{}.jpg".format(jpeg))
 
-os.system("cd tmp/; COPYFILE_DISABLE=1 tar -cvzf {}.tgz *".format(args.output))
-os.system("mv tmp/{}.tgz .".format(args.output))
+os.system("cd tmp/; zip {} *".format(out))
+os.system("mv tmp/{} .".format(out))
 os.system("rm -rf tmp/")
